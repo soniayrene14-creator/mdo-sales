@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/di/app_providers.dart';
 import '../../../core/common/result.dart';
 import '../../../domain/entities/user_entity.dart';
+import '../../../domain/usecases/params/no_param.dart';
 import '../../../domain/usecases/user_usecases.dart';
 import '../auth/auth_notifier.dart';
 import 'account_state.dart';
@@ -26,10 +27,10 @@ class AccountNotifier extends AutoDisposeNotifier<AccountFormState> {
   }
 
   Future<void> initProfileForm() async {
-    final userId = _requireUserId();
+    _requireUserId();
     final userRepository = ref.read(userRepositoryProvider);
 
-    var res = await GetUserUsecase(userRepository).call(userId);
+    var res = await GetMeUsecase(userRepository).call(NoParam());
 
     if (res.isSuccess) {
       state = state.copyWith(
@@ -57,7 +58,7 @@ class AccountNotifier extends AutoDisposeNotifier<AccountFormState> {
         imageUrl: state.imageUrl ?? '',
       );
 
-      var res = await UpateUserUsecase(userRepository).call((user: user, imageFilePath: state.imageFile?.path));
+      var res = await UpdateMeUsecase(userRepository).call((user: user, imageFilePath: state.imageFile?.path));
 
       return res;
     } catch (e) {

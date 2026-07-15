@@ -112,12 +112,21 @@ class ProductLocalDatasourceImpl extends ProductDatasource {
     int limit = 10,
     int? offset,
     String? contains,
+    int? categoryId,
   }) async {
     try {
+      final whereClauses = ['createdById = ?', 'name LIKE ?', 'is_active = 1'];
+      final whereArgs = <Object?>[userId, "%${contains ?? ''}%"];
+
+      if (categoryId != null) {
+        whereClauses.add('category = ?');
+        whereArgs.add(categoryId);
+      }
+
       var res = await _databaseService.database.query(
         DatabaseConfig.productTableName,
-        where: 'createdById = ? AND name LIKE ? AND is_active = 1',
-        whereArgs: [userId, "%${contains ?? ''}%"],
+        where: whereClauses.join(' AND '),
+        whereArgs: whereArgs,
         orderBy: '$orderBy $sortBy',
         limit: limit,
         offset: offset,

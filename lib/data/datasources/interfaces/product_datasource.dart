@@ -19,6 +19,7 @@ abstract class ProductDatasource {
     int limit,
     int? offset,
     String? contains,
+    int? categoryId,
   });
 
   Future<Result<List<ProductModel>>> getLowStockProducts();

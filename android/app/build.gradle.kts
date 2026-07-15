@@ -16,7 +16,7 @@ plugins {
 android {
     namespace = "com.elriztechnology.flutter_pos"
     compileSdk = 36
-    ndkVersion = "30.0.14904198"
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

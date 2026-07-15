@@ -19,6 +19,7 @@ abstract class ProductRepository {
     int limit,
     int? offset,
     String? contains,
+    int? categoryId,
   });
 
   Future<Result<List<ProductEntity>>> getLowStockProducts();

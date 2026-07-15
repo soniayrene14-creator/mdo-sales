@@ -156,11 +156,15 @@ class ProductDjangoRemoteDataSourceImpl implements ProductDatasource {
     int limit = 20,
     int? offset,
     String? contains,
+    int? categoryId,
   }) async {
     try {
       final query = <String, dynamic>{'is_active': 'true'};
       if (contains != null && contains.isNotEmpty) {
         query['search'] = contains;
+      }
+      if (categoryId != null) {
+        query['category'] = categoryId.toString();
       }
       if (sortBy.isNotEmpty) {
         query['ordering'] = sortBy;

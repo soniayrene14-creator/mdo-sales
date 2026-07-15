@@ -49,6 +49,26 @@ class UserLocalDatasourceImpl extends UserDatasource {
   }
 
   @override
+  Future<Result<UserModel?>> getMe() async {
+    try {
+      // Only the signed-in user's own profile is ever cached locally, so
+      // this table holds a single row.
+      var res = await _databaseService.database.query(DatabaseConfig.userTableName, limit: 1);
+
+      if (res.isEmpty) return Result.success(data: null);
+
+      return Result.success(data: UserModel.fromJson(res.first));
+    } catch (e) {
+      return Result.failure(error: e);
+    }
+  }
+
+  @override
+  Future<Result<void>> updateMe(UserModel user, {String? imageFilePath}) async {
+    return updateUser(user, imageFilePath: imageFilePath);
+  }
+
+  @override
   Future<Result<void>> deleteUser(String id) async {
     try {
       await _databaseService.database.delete(

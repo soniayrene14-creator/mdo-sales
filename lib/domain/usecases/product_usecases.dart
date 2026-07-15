@@ -27,6 +27,7 @@ class GetUserProductsUsecase extends Usecase<Result, BaseParams> {
     limit: params.limit,
     offset: params.offset,
     contains: params.contains,
+    categoryId: params.categoryId,
   );
 }
 

@@ -50,6 +50,58 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
+  Future<Result<UserEntity?>> getMe() async {
+    try {
+      if (pingService.isConnected) {
+        final remote = await userRemoteDatasource.getMe();
+        if (remote.isFailure) return Result.failure(error: remote.error!);
+
+        if (remote.data != null) await userLocalDatasource.updateUser(remote.data!);
+
+        return Result.success(data: remote.data?.toEntity());
+      }
+
+      final local = await userLocalDatasource.getMe();
+      return Result.success(data: local.data?.toEntity());
+    } catch (e) {
+      return Result.failure(error: e);
+    }
+  }
+
+  @override
+  Future<Result<void>> updateMe(UserEntity user, {String? imageFilePath}) async {
+    try {
+      final local = await userLocalDatasource.updateUser(UserModel.fromEntity(user), imageFilePath: imageFilePath);
+      if (local.isFailure) return Result.failure(error: local.error!);
+
+      if (pingService.isConnected) {
+        final remote = await userRemoteDatasource.updateMe(
+          UserModel.fromEntity(user),
+          imageFilePath: imageFilePath,
+        );
+        if (remote.isFailure) return Result.failure(error: remote.error!);
+      } else {
+        final res = await queuedActionLocalDatasource.createQueuedAction(
+          QueuedActionModel(
+            id: DateTime.now().millisecondsSinceEpoch,
+            repository: 'UserRepositoryImpl',
+            method: 'updateMe',
+            param: jsonEncode({...UserModel.fromEntity(user).toJson(), 'imageFilePath': imageFilePath}),
+            isCritical: false,
+            createdAt: DateTime.now().toIso8601String(),
+          ),
+        );
+
+        if (res.isFailure) return Result.failure(error: res.error!);
+      }
+
+      return Result.success(data: null);
+    } catch (e) {
+      return Result.failure(error: e);
+    }
+  }
+
+  @override
   Future<Result<String>> createUser(UserEntity user, {String? imageFilePath}) async {
     try {
       var local = await userLocalDatasource.createUser(UserModel.fromEntity(user), imageFilePath: imageFilePath);

@@ -6,6 +6,10 @@ abstract class UserDatasource {
 
   Future<Result<void>> updateUser(UserModel user, {String? imageFilePath});
 
+  Future<Result<UserModel?>> getMe();
+
+  Future<Result<void>> updateMe(UserModel user, {String? imageFilePath});
+
   Future<Result<void>> deleteUser(String id);
 
   Future<Result<UserModel?>> getUser(String id);

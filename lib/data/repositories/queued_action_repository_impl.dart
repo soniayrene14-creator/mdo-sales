@@ -113,6 +113,16 @@ class QueuedActionRepositoryImpl extends QueuedActionRepository {
 
           return Result.success(data: null);
         }
+
+        if (queue.method == 'updateMe') {
+          final json = jsonDecode(queue.param) as Map<String, dynamic>;
+          final param = UserModel.fromJson(json);
+
+          final res = await userRemoteDatasource.updateMe(param, imageFilePath: json['imageFilePath']);
+          if (res.isFailure) return Result.failure(error: res.error!);
+
+          return Result.success(data: null);
+        }
       }
 
       if (queue.repository == 'TransactionRepositoryImpl') {

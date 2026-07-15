@@ -52,3 +52,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+android/build/
+android/app/build/
+android/.gradle/
+
+# Generated test coverage report
+coverage/

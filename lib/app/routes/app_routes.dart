@@ -17,6 +17,7 @@ import '../../presentation/screens/dashboard/sales_report_screen.dart';
 import '../../presentation/screens/error/error_screen.dart';
 import '../../presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/main/main_screen.dart';
+import '../../presentation/screens/products/category_products_screen.dart';
 import '../../presentation/screens/products/product_detail_screen.dart';
 import '../../presentation/screens/products/product_form_screen.dart';
 import '../../presentation/screens/products/products_screen.dart';
@@ -164,6 +165,7 @@ class AppRoutes {
         _productCreate(),
         _productEdit(),
         _productDetail(),
+        _productsByCategory(),
       ],
     );
   }
@@ -238,6 +240,21 @@ class AppRoutes {
         }
 
         return ProductDetailScreen(id: id);
+      },
+    );
+  }
+
+  GoRoute _productsByCategory() {
+    return GoRoute(
+      path: 'category/:id',
+      builder: (context, state) {
+        int? id = int.tryParse(state.pathParameters["id"] ?? '');
+
+        if (id == null) {
+          throw 'Required categoryId is not provided!';
+        }
+
+        return CategoryProductsScreen(categoryId: id, categoryName: state.uri.queryParameters['name']);
       },
     );
   }

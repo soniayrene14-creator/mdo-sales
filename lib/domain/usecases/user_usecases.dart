@@ -2,6 +2,7 @@ import '../../core/common/result.dart';
 import '../../core/usecase/usecase.dart';
 import '../entities/user_entity.dart';
 import '../repositories/user_repository.dart';
+import 'params/no_param.dart';
 
 class GetUserUsecase extends Usecase<Result, String> {
   GetUserUsecase(this._userRepository);
@@ -10,6 +11,25 @@ class GetUserUsecase extends Usecase<Result, String> {
 
   @override
   Future<Result<UserEntity?>> call(String params) async => _userRepository.getUser(params);
+}
+
+class GetMeUsecase extends Usecase<Result, NoParam> {
+  GetMeUsecase(this._userRepository);
+
+  final UserRepository _userRepository;
+
+  @override
+  Future<Result<UserEntity?>> call(NoParam params) async => _userRepository.getMe();
+}
+
+class UpdateMeUsecase extends Usecase<Result<void>, ({UserEntity user, String? imageFilePath})> {
+  UpdateMeUsecase(this._userRepository);
+
+  final UserRepository _userRepository;
+
+  @override
+  Future<Result<void>> call(({UserEntity user, String? imageFilePath}) params) async =>
+      _userRepository.updateMe(params.user, imageFilePath: params.imageFilePath);
 }
 
 class CreateUserUsecase extends Usecase<Result, ({UserEntity user, String? imageFilePath})> {

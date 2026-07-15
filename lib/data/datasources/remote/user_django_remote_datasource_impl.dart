@@ -74,6 +74,59 @@ class UserDjangoRemoteDataSourceImpl implements UserDatasource {
   }
 
   @override
+  Future<Result<UserModel?>> getMe() async {
+    try {
+      final result = await apiClient.get<Map<String, dynamic>>(
+        '/api/v1/auth/me/',
+        parser: (json) => json ?? <String, dynamic>{},
+      );
+
+      if (result.isFailure) {
+        return Result.failure(error: result.error!);
+      }
+
+      final data = result.data!;
+      if (data.isEmpty) {
+        return Result.success(data: null);
+      }
+
+      return Result.success(data: UserModel.fromJson(data));
+    } catch (e) {
+      return Result.failure(error: e);
+    }
+  }
+
+  @override
+  Future<Result<void>> updateMe(UserModel user, {String? imageFilePath}) async {
+    try {
+      final (firstName, lastName) = _splitName(user.name);
+
+      final fields = <String, String>{
+        if (firstName != null) 'first_name': firstName,
+        if (lastName != null) 'last_name': lastName,
+        if (user.email != null) 'email': user.email!,
+        if (user.phone != null) 'phone': user.phone!,
+      };
+
+      final result = await apiClient.putMultipart<Map<String, dynamic>>(
+        '/api/v1/auth/me/',
+        fields: fields,
+        filePath: imageFilePath,
+        fileField: 'photo',
+        parser: (json) => json ?? <String, dynamic>{},
+      );
+
+      if (result.isFailure) {
+        return Result.failure(error: result.error!);
+      }
+
+      return Result<void>.success(data: null);
+    } catch (e) {
+      return Result.failure(error: e);
+    }
+  }
+
+  @override
   Future<Result<({String id, String generatedPassword})>> createEmployee(UserModel user) async {
     try {
       final (firstName, lastName) = _splitName(user.name);

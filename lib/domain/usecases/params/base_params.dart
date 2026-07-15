@@ -7,6 +7,7 @@ class BaseParams<T> extends Equatable {
   final int limit;
   final int? offset;
   final String? contains;
+  final int? categoryId;
 
   const BaseParams({
     this.param,
@@ -15,6 +16,7 @@ class BaseParams<T> extends Equatable {
     this.limit = 10,
     this.offset,
     this.contains,
+    this.categoryId,
   });
 
   @override

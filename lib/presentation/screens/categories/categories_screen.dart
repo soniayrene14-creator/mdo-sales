@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/themes/app_sizes.dart';
 import '../../../domain/entities/category_entity.dart';
@@ -47,6 +48,9 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                     child: ListTile(
                       title: Text(category.name),
                       subtitle: Text(category.description ?? ''),
+                      onTap: () {
+                        context.push('/products/category/${category.id}?name=${Uri.encodeComponent(category.name)}');
+                      },
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

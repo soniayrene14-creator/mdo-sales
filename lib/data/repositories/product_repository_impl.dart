@@ -57,6 +57,7 @@ class ProductRepositoryImpl extends ProductRepository {
     int limit = 10,
     int? offset,
     String? contains,
+    int? categoryId,
   }) async {
     try {
       // Reconciliation (creating missing records on either side) only ever
@@ -72,6 +73,7 @@ class ProductRepositoryImpl extends ProductRepository {
           limit: limit,
           offset: offset,
           contains: contains,
+          categoryId: categoryId,
         );
 
         if (remote.isFailure) return Result.failure(error: remote.error!);
@@ -86,6 +88,7 @@ class ProductRepositoryImpl extends ProductRepository {
         limit: limit,
         offset: offset,
         contains: contains,
+        categoryId: categoryId,
       );
 
       if (local.isFailure) return Result.failure(error: local.error!);
