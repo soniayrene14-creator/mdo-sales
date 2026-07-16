@@ -55,13 +55,16 @@ class ProductsNotifier extends Notifier<ProductsState> {
         );
       }
     } else {
-      state = state.copyWith(isLoadingMore: false);
-
       // Only the initial load is a genuine failure worth surfacing. Paging
       // past the last page is expected (the API 404s once there's nothing
       // left) and must not blow up as an uncaught error while scrolling.
       if (offset == null) {
-        throw Exception(res.error?.toString() ?? 'Échec du chargement des données');
+        state = state.copyWith(
+          isLoadingMore: false,
+          error: res.error?.toString() ?? 'Échec du chargement des données',
+        );
+      } else {
+        state = state.copyWith(isLoadingMore: false);
       }
     }
   }

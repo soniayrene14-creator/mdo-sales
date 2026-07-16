@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/themes/app_colors.dart';
 import '../../../core/themes/app_sizes.dart';
 import '../../providers/dashboard/dashboard_notifier.dart';
+import '../../widgets/app_mini_card.dart';
+import '../../widgets/app_stat_card.dart';
 
 class EmployeeDashboardScreen extends ConsumerStatefulWidget {
   const EmployeeDashboardScreen({super.key});
@@ -42,60 +45,44 @@ class _EmployeeDashboardScreenState extends ConsumerState<EmployeeDashboardScree
             children: [
               Row(
                 children: [
-                  _buildMiniCard(context, 'Produits', '${employeeDashboard.nombreProduits}'),
+                  AppMiniCard(
+                    title: 'Produits',
+                    value: '${employeeDashboard.nombreProduits}',
+                    icon: Icons.inventory_2_rounded,
+                    color: AppColors.orange,
+                  ),
                   const SizedBox(width: AppSizes.padding),
-                  _buildMiniCard(context, 'Catégories', '${employeeDashboard.nombreCategories}'),
+                  AppMiniCard(
+                    title: 'Catégories',
+                    value: '${employeeDashboard.nombreCategories}',
+                    icon: Icons.category_rounded,
+                    color: AppColors.cyan,
+                  ),
                 ],
               ),
               const SizedBox(height: AppSizes.padding * 2),
-              _buildStatCard(context, 'Mes ventes du jour', '${employeeDashboard.mesVentesDuJour}'),
+              AppStatCard(
+                title: 'Mes ventes du jour',
+                value: '${employeeDashboard.mesVentesDuJour}',
+                icon: Icons.point_of_sale_rounded,
+                color: AppColors.green,
+              ),
               const SizedBox(height: AppSizes.padding),
-              _buildStatCard(context, 'Mon chiffre d\'affaires', '${employeeDashboard.monChiffreAffairesJour}'),
+              AppStatCard(
+                title: 'Mon chiffre d\'affaires',
+                value: '${employeeDashboard.monChiffreAffairesJour}',
+                icon: Icons.attach_money_rounded,
+                color: AppColors.blue,
+              ),
               const SizedBox(height: AppSizes.padding),
-              _buildStatCard(context, 'Mes proformas', '${employeeDashboard.mesProformas}'),
+              AppStatCard(
+                title: 'Mes proformas',
+                value: '${employeeDashboard.mesProformas}',
+                icon: Icons.description_rounded,
+                color: AppColors.purple,
+              ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatCard(BuildContext context, String title, String value) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppSizes.padding),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: Theme.of(context).colorScheme.surfaceContainerHighest),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: Theme.of(context).textTheme.bodySmall),
-          const SizedBox(height: AppSizes.padding / 4),
-          Text(value, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMiniCard(BuildContext context, String title, String value) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(AppSizes.padding),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: Theme.of(context).colorScheme.surfaceContainerHighest),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: Theme.of(context).textTheme.bodySmall),
-            const SizedBox(height: AppSizes.padding / 4),
-            Text(value, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
-          ],
         ),
       ),
     );

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/themes/app_colors.dart';
 import '../../../core/themes/app_sizes.dart';
 import '../../providers/dashboard/dashboard_notifier.dart';
+import '../../widgets/app_mini_card.dart';
+import '../../widgets/app_stat_card.dart';
 
 class AdminDashboardScreen extends ConsumerStatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -40,72 +43,71 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildStatCard(context, 'Chiffre d\'affaires (jour)', '${adminDashboard.chiffreAffairesJour}'),
+              AppStatCard(
+                title: 'Chiffre d\'affaires (jour)',
+                value: '${adminDashboard.chiffreAffairesJour}',
+                icon: Icons.today_rounded,
+                color: AppColors.blue,
+              ),
               const SizedBox(height: AppSizes.padding),
-              _buildStatCard(context, 'Chiffre d\'affaires (semaine)', '${adminDashboard.chiffreAffairesSemaine}'),
+              AppStatCard(
+                title: 'Chiffre d\'affaires (semaine)',
+                value: '${adminDashboard.chiffreAffairesSemaine}',
+                icon: Icons.date_range_rounded,
+                color: AppColors.purple,
+              ),
               const SizedBox(height: AppSizes.padding),
-              _buildStatCard(context, 'Chiffre d\'affaires (mois)', '${adminDashboard.chiffreAffairesMois}'),
+              AppStatCard(
+                title: 'Chiffre d\'affaires (mois)',
+                value: '${adminDashboard.chiffreAffairesMois}',
+                icon: Icons.calendar_month_rounded,
+                color: AppColors.cyan,
+              ),
               const SizedBox(height: AppSizes.padding * 2),
               Row(
                 children: [
-                  _buildMiniCard(context, 'Produits', '${adminDashboard.nombreProduits}'),
+                  AppMiniCard(
+                    title: 'Produits',
+                    value: '${adminDashboard.nombreProduits}',
+                    icon: Icons.inventory_2_rounded,
+                    color: AppColors.orange,
+                  ),
                   const SizedBox(width: AppSizes.padding),
-                  _buildMiniCard(context, 'Employés', '${adminDashboard.nombreEmployes}'),
+                  AppMiniCard(
+                    title: 'Employés',
+                    value: '${adminDashboard.nombreEmployes}',
+                    icon: Icons.badge_rounded,
+                    color: AppColors.zamp,
+                  ),
                 ],
               ),
               const SizedBox(height: AppSizes.padding),
               Row(
                 children: [
-                  _buildMiniCard(context, 'Rupture', '${adminDashboard.produitsEnRupture}'),
+                  AppMiniCard(
+                    title: 'Rupture',
+                    value: '${adminDashboard.produitsEnRupture}',
+                    icon: Icons.remove_circle_rounded,
+                    color: AppColors.red,
+                  ),
                   const SizedBox(width: AppSizes.padding),
-                  _buildMiniCard(context, 'Stock faible', '${adminDashboard.produitsStockFaible}'),
+                  AppMiniCard(
+                    title: 'Stock faible',
+                    value: '${adminDashboard.produitsStockFaible}',
+                    icon: Icons.warning_amber_rounded,
+                    color: AppColors.yellow,
+                  ),
                 ],
               ),
               const SizedBox(height: AppSizes.padding * 2),
-              _buildStatCard(context, 'Nombre de ventes', '${adminDashboard.nombreVentes}'),
+              AppStatCard(
+                title: 'Nombre de ventes',
+                value: '${adminDashboard.nombreVentes}',
+                icon: Icons.point_of_sale_rounded,
+                color: AppColors.green,
+              ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatCard(BuildContext context, String title, String value) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppSizes.padding),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: Theme.of(context).colorScheme.surfaceContainerHighest),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: Theme.of(context).textTheme.bodySmall),
-          const SizedBox(height: AppSizes.padding / 4),
-          Text(value, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMiniCard(BuildContext context, String title, String value) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(AppSizes.padding),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: Theme.of(context).colorScheme.surfaceContainerHighest),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: Theme.of(context).textTheme.bodySmall),
-            const SizedBox(height: AppSizes.padding / 4),
-            Text(value, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
-          ],
         ),
       ),
     );

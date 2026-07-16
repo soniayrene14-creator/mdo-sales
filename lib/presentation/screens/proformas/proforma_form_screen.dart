@@ -11,6 +11,7 @@ import '../../providers/proformas/proforma_form_notifier.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_dialog.dart';
 import '../../widgets/app_empty_state.dart';
+import '../../widgets/app_error_widget.dart';
 import '../../widgets/app_progress_indicator.dart';
 import '../../widgets/app_snack_bar.dart';
 import '../../widgets/app_text_field.dart';
@@ -148,6 +149,29 @@ class _ProductGridSliver extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final allProducts = ref.watch(productsNotifierProvider.select((p) => p.allProducts));
+    final error = ref.watch(productsNotifierProvider.select((p) => p.error));
+
+    if (allProducts == null && error != null) {
+      return SliverFillRemaining(
+        hasScrollBody: false,
+        fillOverscroll: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSizes.padding * 2),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AppErrorWidget(message: error),
+              const SizedBox(height: AppSizes.padding),
+              AppButton(
+                text: 'Réessayer',
+                width: 160,
+                onTap: () => ref.read(productsNotifierProvider.notifier).getAllProducts(),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     if (allProducts == null) {
       return const SliverFillRemaining(

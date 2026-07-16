@@ -8,6 +8,7 @@ import '../../providers/products/products_notifier.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_dialog.dart';
 import '../../widgets/app_empty_state.dart';
+import '../../widgets/app_error_widget.dart';
 import '../../widgets/app_loading_more_indicator.dart';
 import '../../widgets/app_progress_indicator.dart';
 import '../../widgets/app_snack_bar.dart';
@@ -171,6 +172,7 @@ class _AllProductsTabState extends ConsumerState<_AllProductsTab> {
   Widget build(BuildContext context) {
     final allProducts = ref.watch(productsNotifierProvider.select((s) => s.allProducts));
     final isLoadingMore = ref.watch(productsNotifierProvider.select((s) => s.isLoadingMore));
+    final error = ref.watch(productsNotifierProvider.select((s) => s.error));
 
     return RefreshIndicator(
       onRefresh: () => ref.read(productsNotifierProvider.notifier).getAllProducts(),
@@ -194,6 +196,25 @@ class _AllProductsTabState extends ConsumerState<_AllProductsTab> {
             ),
             SliverLayoutBuilder(
               builder: (context, _) {
+                if (allProducts == null && error != null) {
+                  return SliverFillRemaining(
+                    hasScrollBody: false,
+                    fillOverscroll: true,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppErrorWidget(message: error),
+                        const SizedBox(height: AppSizes.padding),
+                        AppButton(
+                          text: 'Réessayer',
+                          width: 160,
+                          onTap: () => ref.read(productsNotifierProvider.notifier).getAllProducts(),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
                 if (allProducts == null) {
                   return const SliverFillRemaining(
                     hasScrollBody: false,

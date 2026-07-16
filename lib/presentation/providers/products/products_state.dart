@@ -7,6 +7,7 @@ class ProductsState {
   final List<ProductEntity>? inactiveProducts;
   final bool isLoadingMore;
   final bool isLoadingTab;
+  final String? error;
 
   const ProductsState({
     this.allProducts,
@@ -15,6 +16,7 @@ class ProductsState {
     this.inactiveProducts,
     this.isLoadingMore = false,
     this.isLoadingTab = false,
+    this.error,
   });
 
   ProductsState copyWith({
@@ -24,6 +26,7 @@ class ProductsState {
     List<ProductEntity>? inactiveProducts,
     bool? isLoadingMore,
     bool? isLoadingTab,
+    String? error,
   }) {
     return ProductsState(
       allProducts: allProducts ?? this.allProducts,
@@ -32,6 +35,7 @@ class ProductsState {
       inactiveProducts: inactiveProducts ?? this.inactiveProducts,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       isLoadingTab: isLoadingTab ?? this.isLoadingTab,
+      error: error ?? this.error,
     );
   }
 }
