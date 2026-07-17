@@ -151,6 +151,7 @@ class _SingleSelectDropDown<T> extends StatelessWidget {
       onChanged: dropdown.onChanged,
       items: dropdown.dropdownItems,
       style: dropdown.textStyle(context),
+      isExpanded: true,
       icon: Icon(
         Icons.keyboard_arrow_down_rounded,
         color: Theme.of(context).colorScheme.outline,

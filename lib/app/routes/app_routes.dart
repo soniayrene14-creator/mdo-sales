@@ -359,7 +359,7 @@ class AppRoutes {
           builder: (context, state) {
             int? id = int.tryParse(state.pathParameters['id'] ?? '');
             if (id == null) throw 'Required proformaId is not provided!';
-            return ProformaFormScreen(id: id);
+            return ProformaFormScreen(key: ValueKey('proforma-edit-$id'), id: id);
           },
         ),
         GoRoute(
@@ -367,7 +367,7 @@ class AppRoutes {
           builder: (context, state) {
             int? id = int.tryParse(state.pathParameters['id'] ?? '');
             if (id == null) throw 'Required proformaId is not provided!';
-            return ProformaDetailScreen(id: id);
+            return ProformaDetailScreen(key: ValueKey('proforma-detail-$id'), id: id);
           },
         ),
       ],

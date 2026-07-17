@@ -179,7 +179,11 @@ class _ProductField extends ConsumerWidget {
         dropdownItems: allProducts.map((product) {
           return DropdownMenuItem<int>(
             value: product.id,
-            child: Text('${product.name} — ${CurrencyFormatter.format(product.price)} (stock : ${product.stock})'),
+            child: Text(
+              '${product.name} — ${CurrencyFormatter.format(product.price)} (stock : ${product.stock})',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           );
         }).toList(),
         onChanged: (value) {
