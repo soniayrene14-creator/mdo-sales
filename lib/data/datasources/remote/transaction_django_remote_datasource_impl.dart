@@ -2,7 +2,6 @@ import '../../../core/common/result.dart';
 import '../../../core/services/api/api_client.dart';
 import '../../models/transaction_model.dart';
 import '../../models/sale_model.dart';
-import '../../models/proforma_model.dart';
 import '../../models/admin_dashboard_model.dart';
 import '../../models/employee_dashboard_model.dart';
 import '../../models/sales_report_model.dart';
@@ -209,71 +208,6 @@ class TransactionDjangoRemoteDataSourceImpl implements TransactionDatasource {
     }
   }
 
-  Future<Result<ProformaModel>> createProforma(ProformaModel proforma) async {
-    try {
-      final body = {
-        'customer_name': proforma.customerName,
-        'customer_phone': proforma.customerPhone ?? '',
-        'items_input': proforma.items
-            .map(
-              (e) => {
-                'product': e.productId,
-                'quantity': e.quantity,
-              },
-            )
-            .toList(),
-      };
-
-      final result = await apiClient.post<Map<String, dynamic>>(
-        '/api/v1/proformas/',
-        body,
-        parser: (json) => json ?? <String, dynamic>{},
-      );
-
-      if (result.isFailure) {
-        return Result.failure(error: result.error!);
-      }
-
-      return Result.success(data: ProformaModel.fromJson(result.data!));
-    } catch (e) {
-      return Result.failure(error: e);
-    }
-  }
-
-  Future<Result<List<ProformaModel>>> getAllProformas() async {
-    try {
-      final result = await apiClient.get<List<ProformaModel>>(
-        '/api/v1/proformas/',
-        parser: _parseProformaList,
-      );
-
-      if (result.isFailure) {
-        return Result.failure(error: result.error!);
-      }
-
-      return Result.success(data: result.data ?? <ProformaModel>[]);
-    } catch (e) {
-      return Result.failure(error: e);
-    }
-  }
-
-  Future<Result<ProformaModel>> getProforma(int proformaId) async {
-    try {
-      final result = await apiClient.get<Map<String, dynamic>>(
-        '/api/v1/proformas/$proformaId/',
-        parser: (json) => json ?? <String, dynamic>{},
-      );
-
-      if (result.isFailure) {
-        return Result.failure(error: result.error!);
-      }
-
-      return Result.success(data: ProformaModel.fromJson(result.data!));
-    } catch (e) {
-      return Result.failure(error: e);
-    }
-  }
-
   Future<Result<AdminDashboardModel>> getAdminDashboard() async {
     try {
       final result = await apiClient.get<Map<String, dynamic>>(
@@ -336,13 +270,5 @@ class TransactionDjangoRemoteDataSourceImpl implements TransactionDatasource {
       return results.map((e) => SaleModel.fromJson(e as Map<String, dynamic>)).toList();
     }
     return <SaleModel>[];
-  }
-
-  List<ProformaModel> _parseProformaList(dynamic json) {
-    final results = json?['results'];
-    if (results is List) {
-      return results.map((e) => ProformaModel.fromJson(e as Map<String, dynamic>)).toList();
-    }
-    return <ProformaModel>[];
   }
 }

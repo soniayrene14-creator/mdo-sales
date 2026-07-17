@@ -17,6 +17,7 @@ import '../../data/datasources/local/transaction_local_datasource_impl.dart';
 import '../../data/datasources/local/user_local_datasource_impl.dart';
 import '../../data/datasources/remote/auth_django_remote_datasource_impl.dart';
 import '../../data/datasources/remote/product_django_remote_datasource_impl.dart';
+import '../../data/datasources/remote/proforma_django_remote_datasource_impl.dart';
 import '../../data/datasources/remote/transaction_django_remote_datasource_impl.dart';
 import '../../data/datasources/remote/user_django_remote_datasource_impl.dart';
 import '../../data/repositories/auth_repository_impl.dart';
@@ -105,6 +106,11 @@ final transactionRemoteDatasourceProvider = Provider<TransactionDjangoRemoteData
     apiClient: ref.watch(apiClientProvider),
   ),
 );
+final proformaRemoteDatasourceProvider = Provider<ProformaDjangoRemoteDataSourceImpl>(
+  (ref) => ProformaDjangoRemoteDataSourceImpl(
+    apiClient: ref.watch(apiClientProvider),
+  ),
+);
 final userRemoteDatasourceProvider = Provider<UserDjangoRemoteDataSourceImpl>(
   (ref) => UserDjangoRemoteDataSourceImpl(
     apiClient: ref.watch(apiClientProvider),
@@ -169,7 +175,7 @@ final saleRepositoryProvider = Provider<SaleRepository>(
 );
 final proformaRepositoryProvider = Provider<ProformaRepository>(
   (ref) => ProformaRepositoryImpl(
-    ref.watch(transactionRemoteDatasourceProvider),
+    ref.watch(proformaRemoteDatasourceProvider),
   ),
 );
 final dashboardRepositoryProvider = Provider<DashboardRepository>(

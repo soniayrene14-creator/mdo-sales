@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/di/app_providers.dart';
 import '../../../core/common/result.dart';
-import '../../../domain/entities/proforma_entity.dart';
 import '../../../domain/usecases/params/no_param.dart';
 import '../../../domain/usecases/proforma_usecases.dart';
 import 'proformas_state.dart';
@@ -24,7 +23,7 @@ class ProformasNotifier extends Notifier<ProformasState> {
     if (result.isSuccess) {
       state = state.copyWith(proformas: result.data, isLoading: false);
     } else {
-      state = state.copyWith(isLoading: false);
+      state = state.copyWith(isLoading: false, error: result.error?.toString());
     }
   }
 
@@ -35,7 +34,18 @@ class ProformasNotifier extends Notifier<ProformasState> {
     if (result.isSuccess) {
       state = state.copyWith(selectedProforma: result.data, isLoading: false);
     } else {
-      state = state.copyWith(isLoading: false);
+      state = state.copyWith(isLoading: false, error: result.error?.toString());
     }
+  }
+
+  Future<Result<void>> deleteProforma(int proformaId) async {
+    final repository = ref.read(proformaRepositoryProvider);
+    final result = await DeleteProformaUsecase(repository).call(proformaId);
+
+    if (result.isSuccess) {
+      state = state.copyWith(proformas: state.proformas?.where((e) => e.id != proformaId).toList());
+    }
+
+    return result;
   }
 }

@@ -4,6 +4,7 @@ class AccountFormState {
   final File? imageFile;
   final String? imageUrl;
   final String? name;
+  final String? username;
   final String? email;
   final String? phone;
   final bool isLoaded;
@@ -12,6 +13,7 @@ class AccountFormState {
     this.imageFile,
     this.imageUrl,
     this.name,
+    this.username,
     this.email,
     this.phone,
     this.isLoaded = false,
@@ -21,6 +23,7 @@ class AccountFormState {
     File? imageFile,
     String? imageUrl,
     String? name,
+    String? username,
     String? email,
     String? phone,
     bool? isLoaded,
@@ -29,6 +32,7 @@ class AccountFormState {
       imageFile: imageFile ?? this.imageFile,
       imageUrl: imageUrl ?? this.imageUrl,
       name: name ?? this.name,
+      username: username ?? this.username,
       email: email ?? this.email,
       phone: phone ?? this.phone,
       isLoaded: isLoaded ?? this.isLoaded,

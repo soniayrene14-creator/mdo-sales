@@ -109,7 +109,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
     switch (index) {
       case 0:
-        router.go(isAdmin ? '/dashboard' : '/dashboard/employee');
+        router.go(isAdmin ? '/dashboard' : '/dashboard-employee');
       case 1:
         router.go('/home');
       case 2:

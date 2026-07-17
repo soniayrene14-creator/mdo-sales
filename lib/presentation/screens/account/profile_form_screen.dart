@@ -27,6 +27,7 @@ class ProfileFormScreen extends ConsumerStatefulWidget {
 
 class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
   final nameController = TextEditingController();
+  final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
 
@@ -38,6 +39,7 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
 
       final state = ref.read(accountNotifierProvider);
       nameController.text = state.name ?? '';
+      usernameController.text = state.username ?? '';
       emailController.text = state.email ?? '';
       phoneController.text = state.phone ?? '';
     });
@@ -46,6 +48,7 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
   @override
   void dispose() {
     nameController.dispose();
+    usernameController.dispose();
     emailController.dispose();
     phoneController.dispose();
     super.dispose();
@@ -111,6 +114,7 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
                 children: [
                   _ImageSection(onTapImage: onTapImage),
                   _NameField(controller: nameController, onChanged: account.onChangedName),
+                  _UsernameField(controller: usernameController, onChanged: account.onChangedUsername),
                   _EmailField(controller: emailController, onChanged: account.onChangedEmail),
                   _PhoneField(controller: phoneController, onChanged: account.onChangedPhone),
                   _UpdateButton(onTap: updatedUser),
@@ -203,6 +207,29 @@ class _NameField extends StatelessWidget {
         controller: controller,
         labelText: 'Nom',
         hintText: 'Votre nom...',
+        onChanged: onChanged,
+      ),
+    );
+  }
+}
+
+class _UsernameField extends StatelessWidget {
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+
+  const _UsernameField({
+    required this.controller,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSizes.padding),
+      child: AppTextField(
+        controller: controller,
+        labelText: 'Nom d\'utilisateur',
+        hintText: 'Votre nom d\'utilisateur...',
         onChanged: onChanged,
       ),
     );

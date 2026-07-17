@@ -27,5 +27,10 @@ class Constants {
   // Non-critical error libraries that should be logged but not navigate to error screen
   static const nonCriticalErrorLibraries = {
     'image resource service',
+    // The scheduler library reports errors from post-frame callbacks that
+    // ran after their widget was disposed (e.g. app_image's precache call
+    // in a product grid item unmounted mid-navigation). Flutter already
+    // recovers from these on its own; they must not black out the screen.
+    'scheduler library',
   };
 }

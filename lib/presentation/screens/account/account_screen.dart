@@ -362,7 +362,7 @@ class _EmployeesButton extends ConsumerWidget {
                 ),
                 const SizedBox(width: AppSizes.padding / 1.5),
                 Text(
-                  'Employés',
+                  'Utilisateurs',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

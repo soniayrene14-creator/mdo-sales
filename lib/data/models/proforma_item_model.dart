@@ -1,4 +1,3 @@
-import '../../domain/entities/proforma_entity.dart';
 import '../../domain/entities/proforma_item_entity.dart';
 
 class ProformaItemModel {

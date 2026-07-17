@@ -36,6 +36,7 @@ class AccountNotifier extends AutoDisposeNotifier<AccountFormState> {
       state = state.copyWith(
         imageUrl: res.data?.imageUrl,
         name: res.data?.name,
+        username: res.data?.username,
         email: res.data?.email,
         phone: res.data?.phone,
         isLoaded: true,
@@ -55,6 +56,7 @@ class AccountNotifier extends AutoDisposeNotifier<AccountFormState> {
         email: state.email,
         phone: state.phone,
         name: state.name!,
+        username: state.username,
         imageUrl: state.imageUrl ?? '',
       );
 
@@ -72,6 +74,10 @@ class AccountNotifier extends AutoDisposeNotifier<AccountFormState> {
 
   void onChangedName(String value) {
     state = state.copyWith(name: value);
+  }
+
+  void onChangedUsername(String value) {
+    state = state.copyWith(username: value);
   }
 
   void onChangedEmail(String value) {

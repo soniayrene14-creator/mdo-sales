@@ -47,7 +47,7 @@ class _EmployeesScreenState extends ConsumerState<EmployeesScreen> {
     final currentUserId = ref.watch(mainNotifierProvider.select((p) => p.user?.id));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Employés')),
+      appBar: AppBar(title: const Text('Utilisateurs')),
       body: Column(
         children: [
           Padding(

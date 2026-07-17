@@ -102,6 +102,7 @@ class UserDjangoRemoteDataSourceImpl implements UserDatasource {
       final (firstName, lastName) = _splitName(user.name);
 
       final fields = <String, String>{
+        if (user.username != null) 'username': user.username!,
         if (firstName != null) 'first_name': firstName,
         if (lastName != null) 'last_name': lastName,
         if (user.email != null) 'email': user.email!,

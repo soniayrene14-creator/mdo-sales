@@ -83,8 +83,10 @@ class MainNotifier extends Notifier<MainState> {
     final transactionRepository = ref.read(transactionRepositoryProvider);
 
     // Run multiple futures simultaneously
+    // GetMeUsecase (not GetUserUsecase) since /accounts/{id}/ is admin-only
+    // and would 403 for an employee fetching their own account.
     var res = await Future.wait([
-      GetUserUsecase(userRepository).call(userId),
+      GetMeUsecase(userRepository).call(NoParam()),
       SyncAllUserProductsUsecase(productRepository).call(userId),
       SyncAllUserTransactionsUsecase(transactionRepository).call(userId),
     ]);

@@ -70,7 +70,8 @@ class AppRoutes {
         final isAuthenticated = authState.isAuthenticated;
         final isSplashRoute = state.fullPath == '/';
         final isAuthRoute = state.fullPath?.startsWith('/sign-in') ?? false;
-        final landingRoute = (authState.user?.isAdmin ?? false) ? '/dashboard' : '/dashboard/employee';
+        final isAdmin = authState.user?.isAdmin ?? false;
+        final landingRoute = isAdmin ? '/dashboard' : '/dashboard-employee';
 
         if (isChecking) {
           return '/';
@@ -82,6 +83,14 @@ class AppRoutes {
 
         if (isAuthenticated && isAuthRoute) {
           return landingRoute;
+        }
+
+        final path = state.matchedLocation;
+        final isAdminOnlyRoute =
+            path == '/dashboard' || path.startsWith('/dashboard/reports') || path.startsWith('/account/employees');
+
+        if (isAuthenticated && !isAdmin && isAdminOnlyRoute) {
+          return '/dashboard-employee';
         }
 
         return isSplashRoute ? landingRoute : null;
@@ -136,6 +145,7 @@ class AppRoutes {
         _transactions(),
         _sales(),
         _dashboard(),
+        _employeeDashboard(),
         _account(),
         _changePassword(),
       ],
@@ -345,6 +355,14 @@ class AppRoutes {
           },
         ),
         GoRoute(
+          path: 'proforma-edit/:id',
+          builder: (context, state) {
+            int? id = int.tryParse(state.pathParameters['id'] ?? '');
+            if (id == null) throw 'Required proformaId is not provided!';
+            return ProformaFormScreen(id: id);
+          },
+        ),
+        GoRoute(
           path: 'proforma-detail/:id',
           builder: (context, state) {
             int? id = int.tryParse(state.pathParameters['id'] ?? '');
@@ -384,18 +402,28 @@ class AppRoutes {
       },
       routes: [
         GoRoute(
-          path: 'employee',
-          builder: (context, state) {
-            return EmployeeDashboardScreen();
-          },
-        ),
-        GoRoute(
           path: 'reports/sales',
           builder: (context, state) {
             return const SalesReportScreen();
           },
         ),
       ],
+    );
+  }
+
+  GoRoute _employeeDashboard() {
+    // Deliberately a top-level sibling of _dashboard(), not a subroute:
+    // GoRouter builds nested routes as a page stack including every
+    // ancestor, so '/dashboard/employee' would always keep AdminDashboardScreen
+    // underneath it — the system back button would pop straight into the
+    // (403-for-employees) admin dashboard instead of leaving the app.
+    return GoRoute(
+      path: '/dashboard-employee',
+      pageBuilder: (context, state) {
+        return NoTransitionPage<void>(
+          child: EmployeeDashboardScreen(),
+        );
+      },
     );
   }
 

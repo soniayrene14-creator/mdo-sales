@@ -30,3 +30,21 @@ class CreateProformaUsecase extends Usecase<Result, ProformaEntity> {
   @override
   Future<Result<ProformaEntity>> call(ProformaEntity params) async => _proformaRepository.createProforma(params);
 }
+
+class UpdateProformaUsecase extends Usecase<Result, ProformaEntity> {
+  UpdateProformaUsecase(this._proformaRepository);
+
+  final ProformaRepository _proformaRepository;
+
+  @override
+  Future<Result<ProformaEntity>> call(ProformaEntity params) async => _proformaRepository.updateProforma(params);
+}
+
+class DeleteProformaUsecase extends Usecase<Result<void>, int> {
+  DeleteProformaUsecase(this._proformaRepository);
+
+  final ProformaRepository _proformaRepository;
+
+  @override
+  Future<Result<void>> call(int params) async => _proformaRepository.deleteProforma(params);
+}

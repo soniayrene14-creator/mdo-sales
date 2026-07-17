@@ -5,30 +5,58 @@ import '../../../app/di/app_providers.dart';
 import '../../../core/themes/app_sizes.dart';
 import '../../../core/utilities/currency_formatter.dart';
 import '../../providers/proformas/proformas_notifier.dart';
-import '../../providers/proformas/proformas_state.dart';
+import '../../widgets/app_button.dart';
+import '../../widgets/app_error_widget.dart';
+import '../../widgets/app_progress_indicator.dart';
 import '../../widgets/app_snack_bar.dart';
 
-class ProformaDetailScreen extends ConsumerWidget {
+class ProformaDetailScreen extends ConsumerStatefulWidget {
   final int id;
 
   const ProformaDetailScreen({super.key, required this.id});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final proformasState = ref.watch(proformasNotifierProvider);
+  ConsumerState<ProformaDetailScreen> createState() => _ProformaDetailScreenState();
+}
 
-    ref.listen<ProformasState>(proformasNotifierProvider, (previous, next) {
-      if (previous?.selectedProforma?.id != id && next.selectedProforma?.id != id) {
-        ref.read(proformasNotifierProvider.notifier).loadProformaDetail(id);
-      }
+class _ProformaDetailScreenState extends ConsumerState<ProformaDetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(proformasNotifierProvider.notifier).loadProformaDetail(widget.id);
     });
+  }
 
-    final proforma = proformasState.selectedProforma?.id == id ? proformasState.selectedProforma : null;
+  @override
+  Widget build(BuildContext context) {
+    final proformasState = ref.watch(proformasNotifierProvider);
+    final proforma = proformasState.selectedProforma?.id == widget.id ? proformasState.selectedProforma : null;
+
+    if (proforma == null && proformasState.error != null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Détails de la proforma')),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AppErrorWidget(message: proformasState.error),
+              const SizedBox(height: AppSizes.padding),
+              AppButton(
+                text: 'Réessayer',
+                width: 160,
+                onTap: () => ref.read(proformasNotifierProvider.notifier).loadProformaDetail(widget.id),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     if (proforma == null) {
       return Scaffold(
         appBar: AppBar(title: const Text('Détails de la proforma')),
-        body: const Center(child: CircularProgressIndicator()),
+        body: const Center(child: AppProgressIndicator()),
       );
     }
 
@@ -40,7 +68,10 @@ class ProformaDetailScreen extends ConsumerWidget {
             onPressed: () async {
               final res = await ref
                   .read(documentDownloadServiceProvider)
-                  .downloadAndOpen(path: '/api/v1/proformas/$id/pdf/', fileName: '${proforma.proformaNumber}.pdf');
+                  .downloadAndOpen(
+                    path: '/api/v1/proformas/${widget.id}/pdf/',
+                    fileName: '${proforma.proformaNumber}.pdf',
+                  );
 
               if (res.isFailure) {
                 AppSnackBar.showError(res.error.toString());
@@ -66,12 +97,17 @@ class ProformaDetailScreen extends ConsumerWidget {
               ...proforma.items.map(
                 (item) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: AppSizes.padding / 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: Text(item.productName)),
-                      Text('x${item.quantity}'),
-                      Text(CurrencyFormatter.format(item.subtotal)),
+                      Text(item.productName, style: const TextStyle(fontWeight: FontWeight.w600)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${item.quantity} x ${CurrencyFormatter.format(item.unitPrice)}'),
+                          Text(CurrencyFormatter.format(item.subtotal)),
+                        ],
+                      ),
                     ],
                   ),
                 ),

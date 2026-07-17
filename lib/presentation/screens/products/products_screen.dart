@@ -67,7 +67,7 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> with SingleTick
         title: const Text('Produits'),
         elevation: 0,
         shadowColor: Colors.transparent,
-        actions: const [_AddButton()],
+        actions: const [_AddProformaButton(), _AddButton()],
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
@@ -88,6 +88,42 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> with SingleTick
           _OutOfStockTab(),
           _InactiveTab(),
         ],
+      ),
+    );
+  }
+}
+
+class _AddProformaButton extends StatelessWidget {
+  const _AddProformaButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: AppSizes.padding / 2),
+      child: AppButton(
+        height: 26,
+        borderRadius: BorderRadius.circular(4),
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.padding / 2),
+        buttonColor: Theme.of(context).colorScheme.surfaceContainer,
+        child: Row(
+          children: [
+            Icon(
+              Icons.description_outlined,
+              size: 12,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(width: AppSizes.padding / 4),
+            Text(
+              'Ajouter une proforma',
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ],
+        ),
+        onTap: () => context.push('/account/proformas/proforma-create'),
       ),
     );
   }

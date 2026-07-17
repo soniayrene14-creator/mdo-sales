@@ -5,4 +5,6 @@ abstract class ProformaRepository {
   Future<Result<List<ProformaEntity>>> getAllProformas();
   Future<Result<ProformaEntity>> getProforma(int proformaId);
   Future<Result<ProformaEntity>> createProforma(ProformaEntity proforma);
+  Future<Result<ProformaEntity>> updateProforma(ProformaEntity proforma);
+  Future<Result<void>> deleteProforma(int proformaId);
 }
